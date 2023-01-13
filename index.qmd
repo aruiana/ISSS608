@@ -2,6 +2,4 @@
 title: "ISSS608"
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Welcome to my **homepage**. This is the best thing ever.
