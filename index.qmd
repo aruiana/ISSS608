@@ -3,5 +3,3 @@ title: "ISSS608"
 ---
 
 Welcome to my **homepage**. This is the best thing ever.
-
-Is the updates live?
