@@ -2,6 +2,10 @@
 
 Creating data visualisation beyond default
 
+## Tableau Submission
+
+[![Tableau Public](images/image-885678079.png)](https://public.tableau.com/app/profile/ariana.tan6501/viz/VATakeHome1/Sheet13)
+
 ---
 title: "Hands-on Ex 1"
 author: "Ariana"

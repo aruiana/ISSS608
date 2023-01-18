@@ -1,5 +1,7 @@
 ---
-title: "About"
+title: "Submission Links"
 ---
 
-About this site
+Tableau Profile: [Ariana Tan](https://public.tableau.com/app/profile/ariana.tan6501)
+
+Github: [Aruiana](https://app.netlify.com/teams/aruiana/overview)
