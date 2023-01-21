@@ -4,13 +4,13 @@ Creating data visualisation beyond default
 
 ## Tableau Submission
 
-[![Tableau Public](images/image-885678079.png)](https://public.tableau.com/app/profile/ariana.tan6501/viz/VATakeHome1/Sheet13)
+[![](images/image-627314489.png)](https://public.tableau.com/app/profile/ariana.tan6501/viz/VATakeHome1/Sheet12?publish=yes)
 
 ---
 title: "Hands-on Ex 1"
 author: "Ariana"
 date: "17 Jan 2023"
-tbl-colwidths: [5,30,65]
+tbl-colwidths: [2,23,75]
 ---
 
 ## Step-by-step Preparation
@@ -60,7 +60,9 @@ tbl-colwidths: [5,30,65]
 |            | Sever \> Tableau Public \> Save to Tableau Public                                               |                                                                  |
 +------------+-------------------------------------------------------------------------------------------------+------------------------------------------------------------------+
 
-## Key Observations
+## Takeaways
+
+### Table Visualisation
 
 ### a. Female vs Male
 
