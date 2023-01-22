@@ -3,3 +3,6 @@ title: "Hands-on Excercise 2: Creating Elegent Graphics with ggplot2"
 author: "Aruiana"
 date: "`r Sys.Date()`"
 ---
+
+```{r}
+pacman::p_load(tidyverse)
