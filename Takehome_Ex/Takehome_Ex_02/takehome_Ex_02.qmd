@@ -1,0 +1,52 @@
+---
+title: "Take Home Ex 2"
+author: "Aruiana"
+---
+
+## Selected Graph
+
+[![SINGAPORE POPULATION DISTRIBUTION BY AGE by THOMAS HOANG](images/Dashboard%203.png)](https://public.tableau.com/app/profile/thomas.hoang8154/viz/takehome1_16740523080150/Dashboard3)
+
+## Critic
+
+## Sketch
+
+## Remake
+
+```{r}
+pacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes,ggrepel,dplyr,prettyR) 
+
+#| echo: false
+  Popdata <- read_csv("data/respopagesextod2022.csv", show_col_types = FALSE)
+
+ Popdata_males <- Popdata %>%
+  filter(`Sex` ==  "Males") %>%
+  mutate (Pop = -Pop)
+ 
+ Popdata_females <-Popdata %>%
+  filter(`Sex` ==  "Females") 
+Popdata_T <- rbind(Popdata_males,Popdata_females)
+
+paged_table(Popdata_T)
+```
+
+```{r}
+Popdata_T$AG <- factor (Popdata_T$AG, levels = unique(Popdata_T$AG)) 
+    ggplot(Popdata_T, aes (x = AG, y = Pop, fill = Sex)) +
+      geom_bar(stat = "identity") +
+      coord_flip()
+```
+
+```{r}
+xbrks <- seq(-60000,60000,10000)
+xlabls <- paste0(as.character(c(seq(60, 0, -10),seq(10,60,10))),"k")
+```
+
+```{r}
+Popdata_T_Bedok <-Popdata_T %>% 
+ filter(`PA` ==  "Bedok") 
+
+ggplot(Popdata_T_Bedok, aes (x = AG, y = Pop, fill = Sex)) +
+      geom_bar(stat = "identity") +
+      scale_y_continuous(breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw()
+```
