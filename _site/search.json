@@ -33,5 +33,33 @@
     "title": "Hands-on Excercise 2: Creating Elegent Graphics with ggplot2",
     "section": "",
     "text": "pacman::p_load(tidyverse)"
+  },
+  {
+    "objectID": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html",
+    "href": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html",
+    "title": "Take Home Ex 2",
+    "section": "",
+    "text": "SINGAPORE POPULATION DISTRIBUTION BY AGE by THOMAS HOANG"
+  },
+  {
+    "objectID": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#critic",
+    "href": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#critic",
+    "title": "Take Home Ex 2",
+    "section": "Critic",
+    "text": "Critic"
+  },
+  {
+    "objectID": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#sketch",
+    "href": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#sketch",
+    "title": "Take Home Ex 2",
+    "section": "Sketch",
+    "text": "Sketch"
+  },
+  {
+    "objectID": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#remake",
+    "href": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#remake",
+    "title": "Take Home Ex 2",
+    "section": "Remake",
+    "text": "Remake\n\npacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes,ggrepel,dplyr,prettyR, rmarkdown) \n\n#| echo: false\n  Popdata <- read_csv(\"data/respopagesextod2022.csv\", show_col_types = FALSE)\n\n Popdata_males <- Popdata %>%\n  filter(`Sex` ==  \"Males\") %>%\n  mutate (Pop = -Pop)\n \n Popdata_females <-Popdata %>%\n  filter(`Sex` ==  \"Females\") \nPopdata_T <- rbind(Popdata_males,Popdata_females)\n\npaged_table(Popdata_T)\n\n\n\n  \n\n\n\n\nPopdata_T$AG <- factor (Popdata_T$AG, levels = unique(Popdata_T$AG)) \n    ggplot(Popdata_T, aes (x = AG, y = Pop, fill = Sex)) +\n      geom_bar(stat = \"identity\") +\n      coord_flip()\n\n\n\n\n\nxbrks <- seq(-60000,60000,10000)\nxlabls <- paste0(as.character(c(seq(60, 0, -10),seq(10,60,10))),\"k\")\n\n\nPopdata_T_Bedok <-Popdata_T %>% \n filter(`PA` ==  \"Bedok\") \n\nggplot(Popdata_T_Bedok, aes (x = AG, y = Pop, fill = Sex)) +\n      geom_bar(stat = \"identity\") +\n      scale_y_continuous(breaks = xbrks, labels = xlabls, name = \"Population Size\")+  xlab(\"Age Groups\") + coord_flip() + theme_bw()"
   }
 ]

@@ -14,7 +14,7 @@ author: "Aruiana"
 ## Remake
 
 ```{r}
-pacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes,ggrepel,dplyr,prettyR) 
+pacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes,ggrepel,dplyr,prettyR, rmarkdown) 
 
 #| echo: false
   Popdata <- read_csv("data/respopagesextod2022.csv", show_col_types = FALSE)

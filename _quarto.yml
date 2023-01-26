@@ -13,9 +13,9 @@ website:
           href: "Hands-on_EX02/Hands-on_EX02.html"
     - text: "Take-home Excercise"
       menu:
-        - text: "Takehome Ex1"
+        - text: "Takehome Ex 1"
           href: "Takehome_Ex/Takehome_Ex_01/takehome_Ex_01.html"
-        - text: "Takehome Ex2"
+        - text: "Takehome Ex 2"
           href: "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html"
     right:
       - href: index.qmd
