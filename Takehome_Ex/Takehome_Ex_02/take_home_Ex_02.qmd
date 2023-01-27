@@ -1,3 +1,0 @@
----
-title: "TakeHome_Ex_02"
----

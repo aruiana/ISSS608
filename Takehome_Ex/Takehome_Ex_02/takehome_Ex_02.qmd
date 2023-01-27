@@ -9,7 +9,11 @@ author: "Aruiana"
 
 ## Critic
 
+
+
 ## Sketch
+
+
 
 ## Remake
 
@@ -23,7 +27,7 @@ Popdata
 ```
 
 ```{r}
-PlanningA <- Popdata %>% group_by(PA) %>% summarise(SumPop = sum(Pop))
+PlanningA <- Popdata %>% group_by(PA) %>% summarise(SumPop = sum(Pop)) 
 
 PlanningA
 
@@ -52,16 +56,6 @@ ggplot(Popdata_T, aes (x = AG, y = Pop, fill = Sex)) +
       scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(~ PA)
 ```
 
-```{r}
-xbrks <- seq(-14000,14000,2000)
-xlabls <- paste0(as.character(c(seq(14, 0, -2),seq(2,14,2))),"k")
-
-ggplot(Top9, aes (x = AG, y = Pop, fill = Sex)) +
-      geom_bar(stat = "identity") + 
-      scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() +
-  facet_wrap(~ PA)
-  
-```
 
 ```{r}
 xbrks <- seq(-14000,14000,2000)
