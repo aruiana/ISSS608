@@ -1,0 +1,73 @@
+---
+title: "Take Home Ex 2"
+author: "Aruiana"
+---
+
+
+## Selected Graph
+
+[![SINGAPORE POPULATION DISTRIBUTION BY AGE by THOMAS HOANG](images/Dashboard%203.png)](https://public.tableau.com/app/profile/thomas.hoang8154/viz/takehome1_16740523080150/Dashboard3)
+
+## Critic
+
+![](images/image-2059255497.png){width="384"}
+
+## Sketch
+
+![](images/image-1658455050.png)
+
+## Remake
+
+
+```{r}
+pacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes,ggrepel,dplyr,prettyR, rmarkdown, XML, reshape2, plyr) 
+
+#| echo: false
+  Popdata <- read_csv("data/respopagesextod2022.csv", show_col_types = FALSE)
+Popdata
+
+```
+
+```{r}
+PlanningA <- Popdata %>% group_by(PA) %>% summarise(SumPop = sum(Pop)) 
+
+PlanningA
+
+```
+
+```{r}
+ Popdata_males <- Popdata %>%
+  filter(`Sex` ==  "Males") %>%
+  mutate (Pop = -Pop)
+ 
+ Popdata_females <-Popdata %>%
+  filter(`Sex` ==  "Females") 
+Popdata_T <- rbind(Popdata_males,Popdata_females)
+
+paged_table(Popdata_T)
+```
+
+```{r}
+Popdata_T$AG <- factor (Popdata_T$AG, levels = unique(Popdata_T$AG))
+
+xbrks <- seq(-14000,14000,2000)
+xlabls <- paste0(as.character(c(seq(14, 0, -2),seq(2,14,2))),"k")
+
+ggplot(Popdata_T, aes (x = AG, y = Pop, fill = Sex)) +
+      geom_bar(stat = "identity") + 
+      scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(~ PA)
+```
+
+```{r}
+xbrks <- seq(-14000,14000,2000)
+xlabls <- paste0(as.character(c(seq(14, 0, -2),seq(2,14,2))),"k")
+
+Popdata_T_Bedok <-Popdata_T %>% 
+ filter(`PA` ==  "Bedok") 
+
+Popdata_T_Bedok$AG <- factor (Popdata_T_Bedok$AG, levels = unique(Popdata_T_Bedok$AG)) 
+ggplot(Popdata_T_Bedok, aes (x = AG, y = Pop, fill = Sex)) +
+      geom_bar(stat = "identity") + 
+      scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw()
+```
+

@@ -9,11 +9,11 @@ author: "Aruiana"
 
 ## Critic
 
-
+![](images/image-2059255497.png){width="384"}
 
 ## Sketch
 
-
+![](images/image-1658455050.png)
 
 ## Remake
 
@@ -55,7 +55,6 @@ ggplot(Popdata_T, aes (x = AG, y = Pop, fill = Sex)) +
       geom_bar(stat = "identity") + 
       scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(~ PA)
 ```
-
 
 ```{r}
 xbrks <- seq(-14000,14000,2000)

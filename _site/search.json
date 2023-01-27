@@ -46,7 +46,7 @@
     "href": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#critic",
     "title": "Take Home Ex 2",
     "section": "Critic",
-    "text": "Critic"
+    "text": "Critic\n\nlibrary(magick)\n\nLinking to ImageMagick 6.9.12.3\nEnabled features: cairo, freetype, fftw, ghostscript, heic, lcms, pango, raw, rsvg, webp\nDisabled features: fontconfig, x11\n\nimg = image_read(\"images/image-1998510841.png\")\n  \nimage_scale(image_scale(img,\"50%\"),\"80%\")"
   },
   {
     "objectID": "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html#sketch",
