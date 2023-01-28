@@ -79,5 +79,5 @@ Popdata_T9 <- Popdata_T %>%
 
 ggplot(Popdata_T9, aes (x = AG, y = Pop, fill = Sex)) +
       geom_bar(stat = "identity") + 
-      scale_y_continuous(limits = c(-15000,15000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(vars(PA))
+      scale_y_continuous(limits = c(-15000,15000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(vars(PA)) + scale_fill_manual("legend", values = c("Females" = "indianred1", "Males" = "royalblue3"))
 ```
