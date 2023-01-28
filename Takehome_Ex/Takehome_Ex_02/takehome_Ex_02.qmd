@@ -73,7 +73,7 @@ Popdata_T
 ```{r, fig.width=12, fig.height=5}
 
 options(scipen = 999)
-p1 -> ggplot(data = PopdataT9 , aes (y = PA, x = Pop, fill = Sex)) +
+ggplot(data = PopdataT9 , aes (y = PA, x = Pop, fill = Sex)) +
       geom_bar(stat = "identity") + scale_fill_manual("legend", values = c("Females" = "indianred1", "Males" = "royalblue3")) + scale_x_continuous(labels = scales::comma) + ggtitle("Total Population Size of Top 9 Planning Areas")
 ```
 
@@ -86,7 +86,7 @@ xbrks <- seq(-15000,15000,5000)
 xlabls <- paste0(as.character(c(seq(15, 0, -5),seq(5,15,5))),"k")
 Popdata_T$AG <- factor (Popdata_T$AG, levels = unique(Popdata_T$AG))
 
-p2 ->ggplot(Popdata_T9, aes (x = AG, y = Pop, fill = Sex)) +
+ggplot(Popdata_T9, aes (x = AG, y = Pop, fill = Sex)) +
       geom_bar(stat = "identity") + 
       scale_y_continuous(limits = c(-15000,15000), breaks = xbrks, 
                          labels = xlabls, name = "Population Size")+  

@@ -298,7 +298,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="odd">
 <td></td>
-<td>Distracting/unclear colours</td>
+<td>Distracting/ unclear colours</td>
 <td>The yellow and purple colours are glaring for the eyes and is not normally associated with Male/Female (blue/pink)</td>
 </tr>
 </tbody>
@@ -340,32 +340,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="at">n=</span><span class="dv">9</span>, <span class="at">wt=</span>PA_pop) <span class="sc">%&gt;%</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(PA_pop))</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>PA_pop_tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 9 × 2
-  PA            PA_pop
-  &lt;chr&gt;          &lt;dbl&gt;
-1 Bedok         278640
-2 Tampines      265690
-3 Jurong West   258540
-4 Sengkang      253120
-5 Woodlands     252510
-6 Hougang       227540
-7 Yishun        222960
-8 Choa Chu Kang 190330
-9 Punggol       186270</code></pre>
-</div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>PopdataT9 <span class="ot">&lt;-</span> Popdata <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(PA <span class="sc">%in%</span> PA_pop_tab<span class="sc">$</span>PA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a> Popdata_males <span class="ot">&lt;-</span> Popdata <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sex</span><span class="st">`</span> <span class="sc">==</span>  <span class="st">"Males"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span> (<span class="at">Pop =</span> <span class="sc">-</span>Pop)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a> Popdata_females <span class="ot">&lt;-</span>Popdata <span class="sc">%&gt;%</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sex</span><span class="st">`</span> <span class="sc">==</span>  <span class="st">"Females"</span>) </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>Popdata_T <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Popdata_males,Popdata_females)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>Popdata_T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> Popdata_males <span class="ot">&lt;-</span> Popdata <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sex</span><span class="st">`</span> <span class="sc">==</span>  <span class="st">"Males"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span> (<span class="at">Pop =</span> <span class="sc">-</span>Pop)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> Popdata_females <span class="ot">&lt;-</span>Popdata <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sex</span><span class="st">`</span> <span class="sc">==</span>  <span class="st">"Females"</span>) </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>Popdata_T <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Popdata_males,Popdata_females)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>Popdata_T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100,928 × 7
    PA         SZ                     AG     Sex   TOD                  Pop  Time
@@ -384,30 +371,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>xbrks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">15000</span>,<span class="dv">15000</span>,<span class="dv">5000</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>xlabls <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">as.character</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">15</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="dv">5</span>),<span class="fu">seq</span>(<span class="dv">5</span>,<span class="dv">15</span>,<span class="dv">5</span>))),<span class="st">"k"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Popdata_T<span class="sc">$</span>AG <span class="ot">&lt;-</span> <span class="fu">factor</span> (Popdata_T<span class="sc">$</span>AG, <span class="at">levels =</span> <span class="fu">unique</span>(Popdata_T<span class="sc">$</span>AG))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>Popdata_T9 <span class="ot">&lt;-</span> Popdata_T <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(PA <span class="sc">%in%</span> PA_pop_tab<span class="sc">$</span>PA)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>Popdata_T9_M <span class="ot">&lt;-</span> Popdata_T9 <span class="sc">%&gt;%</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">"Males"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Popdata_T9, <span class="fu">aes</span> (<span class="at">x =</span> AG, <span class="at">y =</span> Pop, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> </span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">15000</span>,<span class="dv">15000</span>), <span class="at">breaks =</span> xbrks, </span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> xlabls, <span class="at">name =</span> <span class="st">"Population Size"</span>)<span class="sc">+</span>  </span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Age Groups"</span>) <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(PA)) <span class="sc">+</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">"legend"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"indianred1"</span>, <span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"royalblue3"</span>)) <span class="sc">+</span> </span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data =</span> Popdata_T9 <span class="sc">|&gt;</span> <span class="fu">filter</span>(PA <span class="sc">%in%</span> PA_pop_tab<span class="sc">$</span>PA <span class="sc">&amp;</span> Sex <span class="sc">==</span> <span class="st">"Males"</span>),</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x =</span> AG,</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> Pop),</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">linetype =</span> <span class="st">"dashed"</span>,</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">linewidth =</span> <span class="fl">0.6</span>,</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span><span class="st">"black"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> PopdataT9 , <span class="fu">aes</span> (<span class="at">y =</span> PA, <span class="at">x =</span> Pop, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">scale_fill_manual</span>(<span class="st">"legend"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"indianred1"</span>, <span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"royalblue3"</span>)) <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Total Population Size of Top 9 Planning Areas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="takehome_Ex_02_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Popdata_T9 <span class="ot">&lt;-</span> Popdata_T <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">filter</span>(PA <span class="sc">%in%</span> PA_pop_tab<span class="sc">$</span>PA)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>xbrks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">15000</span>,<span class="dv">15000</span>,<span class="dv">5000</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>xlabls <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">as.character</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">15</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="dv">5</span>),<span class="fu">seq</span>(<span class="dv">5</span>,<span class="dv">15</span>,<span class="dv">5</span>))),<span class="st">"k"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>Popdata_T<span class="sc">$</span>AG <span class="ot">&lt;-</span> <span class="fu">factor</span> (Popdata_T<span class="sc">$</span>AG, <span class="at">levels =</span> <span class="fu">unique</span>(Popdata_T<span class="sc">$</span>AG))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(Popdata_T9, <span class="fu">aes</span> (<span class="at">x =</span> AG, <span class="at">y =</span> Pop, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">15000</span>,<span class="dv">15000</span>), <span class="at">breaks =</span> xbrks, </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> xlabls, <span class="at">name =</span> <span class="st">"Population Size"</span>)<span class="sc">+</span>  </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Age Groups"</span>) <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(PA)) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="st">"legend"</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"indianred1"</span>, <span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"royalblue3"</span>)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Population Pyramid of Top 9 Planning Areas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="takehome_Ex_02_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="1152"></p>
 </div>
 </div>
 
