@@ -9,7 +9,27 @@ author: "Aruiana"
 
 ## Critic
 
-![](images/image-2059255497.png){width="384"}
+![](images/image-2059255497.png){fig-align="center" width="384"}
+
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+| Type       | Critic                                      | Description                                                                                                                       |
++============+=============================================+===================================================================================================================================+
+| Clarity    | y-axis is by ascending order                | In a standard pyramid, the y-axis should be by descending order, with 90&above at the top.                                        |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|            | x-axis is inconsistent:\                    | -   x-axis should be consistent between male and female to show a comparative/symmetrical view of the pyramid (not be misleading) |
+|            | - between male & female in 1 planning area\ |                                                                                                                                   |
+|            | -across all planning areas                  | -   x-axis should be consistent across all planning areas for ease of comparision                                                 |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|            | insufficient spacing for x-axis labels      | User should be able to see the x-axis label clearly                                                                               |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|            | no callouts or lead-in to provide context   | No additional information is given to provide context                                                                             |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+| Aesthetics | Outline is distracting                      | The outline for each bar is distracting as there are many bars and the outline does not give any clarity                          |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|            | No gridelines                               | Missing grid lines for the x axis for ease of comparison                                                                          |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
+|            | Distracting/unclear colours                 | The yellow and purple colours are glaring for the eyes and is not normally associated with Male/Female (blue/pink)                |
++------------+---------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------+
 
 ## Sketch
 
@@ -18,18 +38,22 @@ author: "Aruiana"
 ## Remake
 
 ```{r}
-pacman::p_load(tidyverse, patchwork, ggthemes, hrbrthemes,ggrepel,dplyr,prettyR, rmarkdown, XML, reshape2, plyr) 
+pacman::p_load(tidyverse, patchwork, ggthemes, reshape2, dplyr) 
 
 #| echo: false
-  Popdata <- read_csv("data/respopagesextod2022.csv", show_col_types = FALSE)
+  Popdata <- read_csv("data/respopagesextod2022.csv", col_names = TRUE, show_col_types = FALSE)
 Popdata
 
 ```
 
 ```{r}
-PlanningA <- Popdata %>% group_by(PA) %>% summarise(SumPop = sum(Pop)) 
+PA_pop_tab <- Popdata %>%
+  group_by(PA) %>%
+  summarise(PA_pop = sum(Pop)) %>%
+  top_n(n=9, wt=PA_pop) %>%
+  arrange(desc(PA_pop))
 
-PlanningA
+PA_pop_tab
 
 ```
 
@@ -42,29 +66,18 @@ PlanningA
   filter(`Sex` ==  "Females") 
 Popdata_T <- rbind(Popdata_males,Popdata_females)
 
-paged_table(Popdata_T)
+Popdata_T
 ```
 
-```{r}
+```{r, fig.width=12, fig.height=10}
+xbrks <- seq(-15000,15000,5000)
+xlabls <- paste0(as.character(c(seq(15, 0, -5),seq(5,15,5))),"k")
 Popdata_T$AG <- factor (Popdata_T$AG, levels = unique(Popdata_T$AG))
 
-xbrks <- seq(-14000,14000,2000)
-xlabls <- paste0(as.character(c(seq(14, 0, -2),seq(2,14,2))),"k")
+Popdata_T9 <- Popdata_T %>%
+ filter(PA %in% PA_pop_tab$PA)
 
-ggplot(Popdata_T, aes (x = AG, y = Pop, fill = Sex)) +
+ggplot(Popdata_T9, aes (x = AG, y = Pop, fill = Sex)) +
       geom_bar(stat = "identity") + 
-      scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(~ PA)
-```
-
-```{r}
-xbrks <- seq(-14000,14000,2000)
-xlabls <- paste0(as.character(c(seq(14, 0, -2),seq(2,14,2))),"k")
-
-Popdata_T_Bedok <-Popdata_T %>% 
- filter(`PA` ==  "Bedok") 
-
-Popdata_T_Bedok$AG <- factor (Popdata_T_Bedok$AG, levels = unique(Popdata_T_Bedok$AG)) 
-ggplot(Popdata_T_Bedok, aes (x = AG, y = Pop, fill = Sex)) +
-      geom_bar(stat = "identity") + 
-      scale_y_continuous(limits = c(-14000,14000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw()
+      scale_y_continuous(limits = c(-15000,15000), breaks = xbrks, labels = xlabls, name = "Population Size")+  xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(vars(PA))
 ```

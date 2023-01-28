@@ -5,11 +5,11 @@ website:
   title: "ISSS608"
   navbar:
     left:
-    - text: "Hands-on Excercise"
+    - text: "In Class Excercise"
       menu:
-        - text: "Hands-on Ex1"
+        - text: "In Class Ex1"
           href: "Hands-on_EX01/Hands-on_Ex01/hands-on_Ex01.html"
-        - text: "Hands-on Ex2"
+        - text: "In Class Ex3"
           href: "Hands-on_EX02/Hands-on_EX02.html"
     - text: "Take-home Excercise"
       menu:
