@@ -10,7 +10,9 @@ website:
         - text: "In Class Ex1"
           href: "Hands-on_EX01/Hands-on_Ex01/hands-on_Ex01.html"
         - text: "In Class Ex3"
-          href: "Hands-on_EX02/Hands-on_EX02.html"
+          href: "In-Class_Ex03/In_Class03.html"
+        - text: "In Class Ex4"
+          href: "In-Class_EX04/In_Class04.html"
     - text: "Take-home Excercise"
       menu:
         - text: "Takehome Ex 1"

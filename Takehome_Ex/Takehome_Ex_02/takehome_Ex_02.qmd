@@ -73,8 +73,10 @@ Popdata_T
 ```{r, fig.width=12, fig.height=5}
 
 options(scipen = 999)
-ggplot(data = PopdataT9 , aes (y = PA, x = Pop, fill = Sex)) +
-      geom_bar(stat = "identity") + scale_fill_manual("legend", values = c("Females" = "indianred1", "Males" = "royalblue3")) + scale_x_continuous(labels = scales::comma) + ggtitle("Total Population Size of Top 9 Planning Areas")
+p1 <- ggplot(data = PopdataT9 , aes (y = PA, x = Pop, fill = Sex)) +
+      geom_bar(stat = "identity") + scale_fill_manual("legend", values = c("Females" = "indianred1", "Males" = "royalblue3")) + scale_x_continuous(labels = scales::comma, limits = c(0,250000) ) + ggtitle("Total Population Size of Top 9 Planning Areas")
+
+p1
 ```
 
 ```{r, fig.width=12, fig.height=10}
@@ -86,12 +88,19 @@ xbrks <- seq(-15000,15000,5000)
 xlabls <- paste0(as.character(c(seq(15, 0, -5),seq(5,15,5))),"k")
 Popdata_T$AG <- factor (Popdata_T$AG, levels = unique(Popdata_T$AG))
 
-ggplot(Popdata_T9, aes (x = AG, y = Pop, fill = Sex)) +
+p2 <- ggplot(Popdata_T9, aes (x = AG, y = Pop, fill = Sex)) +
       geom_bar(stat = "identity") + 
       scale_y_continuous(limits = c(-15000,15000), breaks = xbrks, 
                          labels = xlabls, name = "Population Size")+  
   xlab("Age Groups") + coord_flip() + theme_bw() + facet_wrap(vars(PA)) +
   scale_fill_manual("legend", values = c("Females" = "indianred1", "Males" = "royalblue3")) + ggtitle("Population Pyramid of Top 9 Planning Areas")
 
+p2
+```
 
+```{r, fig.width=12, fig.height=15}
+
+p3 <- p1 + p2 + plot_layout(heights = c(1, 2))
+
+p3
 ```
