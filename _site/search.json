@@ -68,5 +68,12 @@
     "title": "InClass Ex 3",
     "section": "",
     "text": "Getting Started\nInstall and launch R packages\nThe code chunk below uses p_load() of pacman package to check if tidyverse and ggiraph packages are installed in the computer.\n\npacman::p_load(ggiraph, tidyverse)\n\nImporting the data\n\n\n\nPlotting a simple bar chart\n\n\n\n\n\n\np <- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE, \n    binwidth = 1, \n    method = \"histodot\") +\n  scale_y_continuous(NULL, \n                     breaks = NULL)\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)"
+  },
+  {
+    "objectID": "In-Class_Ex04/In_Class04.html",
+    "href": "In-Class_Ex04/In_Class04.html",
+    "title": "In-Class Ex 4",
+    "section": "",
+    "text": "pacman::p_load(plotly, DT, patchwork, tidyverse)"
   }
 ]

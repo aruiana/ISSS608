@@ -12,6 +12,5 @@ editor: visual
 ---
 
 ```{r}
+pacman::p_load(plotly, DT, patchwork, tidyverse)
 ```
-
-
