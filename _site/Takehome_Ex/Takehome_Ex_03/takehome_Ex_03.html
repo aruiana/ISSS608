@@ -256,75 +256,121 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>HDB <span class="ot">&lt;-</span> <span class="fu">read_csv</span>((<span class="st">"data/HDB.csv"</span>))</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>HDB<span class="sc">$</span>price_per_sqm <span class="ot">&lt;-</span> (HDB<span class="sc">$</span>resale_price <span class="sc">/</span> HDB<span class="sc">$</span>floor_area_sqm)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>HDB<span class="sc">$</span>age <span class="ot">&lt;-</span> (<span class="dv">2023</span> <span class="sc">-</span> HDB<span class="sc">$</span>lease_commence_date)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>HDB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create addtional data on price per sqm</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>HDB<span class="sc">$</span>price_per_sqm <span class="ot">&lt;-</span> (HDB<span class="sc">$</span>resale_price <span class="sc">/</span> HDB<span class="sc">$</span>floor_area_sqm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter 3Room, 4Room, 5Room</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>HDBRoom <span class="ot">&lt;-</span> HDB <span class="sc">%&gt;%</span> <span class="fu">filter</span>(flat_type<span class="sc">==</span><span class="st">"3 ROOM"</span> <span class="sc">|</span> flat_type<span class="sc">==</span><span class="st">"4 ROOM"</span> <span class="sc">|</span> flat_type<span class="sc">==</span><span class="st">"5 ROOM"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(month, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"month"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="st">"2022"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(remaining_lease, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"rmlease_years"</span>, <span class="st">"rmlease_month"</span>), <span class="at">sep =</span> <span class="st">"years"</span>) </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>rmlease_years <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(HDBRoom<span class="sc">$</span>rmlease_years)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>HDBRoom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 146,338 × 13
-   month   town    flat_…¹ block stree…² store…³ floor…⁴ flat_…⁵ lease…⁶ remai…⁷
-   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  
- 1 2017-01 ANG MO… 2 ROOM  406   ANG MO… 10 TO …      44 Improv…    1979 61 yea…
- 2 2017-01 ANG MO… 3 ROOM  108   ANG MO… 01 TO …      67 New Ge…    1978 60 yea…
- 3 2017-01 ANG MO… 3 ROOM  602   ANG MO… 01 TO …      67 New Ge…    1980 62 yea…
- 4 2017-01 ANG MO… 3 ROOM  465   ANG MO… 04 TO …      68 New Ge…    1980 62 yea…
- 5 2017-01 ANG MO… 3 ROOM  601   ANG MO… 01 TO …      67 New Ge…    1980 62 yea…
- 6 2017-01 ANG MO… 3 ROOM  150   ANG MO… 01 TO …      68 New Ge…    1981 63 yea…
- 7 2017-01 ANG MO… 3 ROOM  447   ANG MO… 04 TO …      68 New Ge…    1979 61 yea…
- 8 2017-01 ANG MO… 3 ROOM  218   ANG MO… 04 TO …      67 New Ge…    1976 58 yea…
- 9 2017-01 ANG MO… 3 ROOM  447   ANG MO… 04 TO …      68 New Ge…    1979 61 yea…
-10 2017-01 ANG MO… 3 ROOM  571   ANG MO… 01 TO …      67 New Ge…    1979 61 yea…
-# … with 146,328 more rows, 3 more variables: resale_price &lt;dbl&gt;,
-#   price_per_sqm &lt;dbl&gt;, age &lt;dbl&gt;, and abbreviated variable names ¹​flat_type,
-#   ²​street_name, ³​storey_range, ⁴​floor_area_sqm, ⁵​flat_model,
-#   ⁶​lease_commence_date, ⁷​remaining_lease</code></pre>
+<pre><code># A tibble: 24,374 × 14
+   year  month town       flat_t…¹ block stree…² store…³ floor…⁴ flat_…⁵ lease…⁶
+   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
+ 1 2022  01    ANG MO KIO 3 ROOM   320   ANG MO… 07 TO …      73 New Ge…    1977
+ 2 2022  01    ANG MO KIO 3 ROOM   225   ANG MO… 07 TO …      67 New Ge…    1978
+ 3 2022  01    ANG MO KIO 3 ROOM   331   ANG MO… 07 TO …      68 New Ge…    1981
+ 4 2022  01    ANG MO KIO 3 ROOM   534   ANG MO… 07 TO …      82 New Ge…    1980
+ 5 2022  01    ANG MO KIO 3 ROOM   578   ANG MO… 04 TO …      67 New Ge…    1980
+ 6 2022  01    ANG MO KIO 3 ROOM   452   ANG MO… 01 TO …      83 New Ge…    1979
+ 7 2022  01    ANG MO KIO 3 ROOM   560   ANG MO… 01 TO …      67 New Ge…    1980
+ 8 2022  01    ANG MO KIO 3 ROOM   435   ANG MO… 04 TO …      67 New Ge…    1979
+ 9 2022  01    ANG MO KIO 3 ROOM   435   ANG MO… 04 TO …      67 New Ge…    1979
+10 2022  01    ANG MO KIO 3 ROOM   560   ANG MO… 10 TO …      67 New Ge…    1980
+# … with 24,364 more rows, 4 more variables: rmlease_years &lt;dbl&gt;,
+#   rmlease_month &lt;chr&gt;, resale_price &lt;dbl&gt;, price_per_sqm &lt;dbl&gt;, and
+#   abbreviated variable names ¹​flat_type, ²​street_name, ³​storey_range,
+#   ⁴​floor_area_sqm, ⁵​flat_model, ⁶​lease_commence_date</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>HDBRoom <span class="ot">&lt;-</span> HDB <span class="sc">%&gt;%</span> <span class="fu">filter</span>(flat_type<span class="sc">==</span><span class="st">"3 ROOM"</span> <span class="sc">|</span> flat_type<span class="sc">==</span><span class="st">"4 ROOM"</span> <span class="sc">|</span> flat_type<span class="sc">==</span><span class="st">"5 ROOM"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>HDBRoom</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 132,581 × 13
-   month   town    flat_…¹ block stree…² store…³ floor…⁴ flat_…⁵ lease…⁶ remai…⁷
-   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  
- 1 2017-01 ANG MO… 3 ROOM  108   ANG MO… 01 TO …      67 New Ge…    1978 60 yea…
- 2 2017-01 ANG MO… 3 ROOM  602   ANG MO… 01 TO …      67 New Ge…    1980 62 yea…
- 3 2017-01 ANG MO… 3 ROOM  465   ANG MO… 04 TO …      68 New Ge…    1980 62 yea…
- 4 2017-01 ANG MO… 3 ROOM  601   ANG MO… 01 TO …      67 New Ge…    1980 62 yea…
- 5 2017-01 ANG MO… 3 ROOM  150   ANG MO… 01 TO …      68 New Ge…    1981 63 yea…
- 6 2017-01 ANG MO… 3 ROOM  447   ANG MO… 04 TO …      68 New Ge…    1979 61 yea…
- 7 2017-01 ANG MO… 3 ROOM  218   ANG MO… 04 TO …      67 New Ge…    1976 58 yea…
- 8 2017-01 ANG MO… 3 ROOM  447   ANG MO… 04 TO …      68 New Ge…    1979 61 yea…
- 9 2017-01 ANG MO… 3 ROOM  571   ANG MO… 01 TO …      67 New Ge…    1979 61 yea…
-10 2017-01 ANG MO… 3 ROOM  534   ANG MO… 01 TO …      68 New Ge…    1980 62 yea…
-# … with 132,571 more rows, 3 more variables: resale_price &lt;dbl&gt;,
-#   price_per_sqm &lt;dbl&gt;, age &lt;dbl&gt;, and abbreviated variable names ¹​flat_type,
-#   ²​street_name, ³​storey_range, ⁴​floor_area_sqm, ⁵​flat_model,
-#   ⁶​lease_commence_date, ⁷​remaining_lease</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gghistostats</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> HDBRoom, <span class="at">x =</span> <span class="st">"floor_area_sqm"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"bayes"</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">test.value =</span> <span class="dv">100</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Floor Area (sqm) of property sold"</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>storey_range <span class="ot">&lt;-</span> <span class="fu">factor</span> (HDBRoom<span class="sc">$</span>storey_range, <span class="at">levels =</span> <span class="fu">unique</span>(HDBRoom<span class="sc">$</span>storey_range))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> HDBRoom,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span>storey_range)) <span class="sc">+</span> <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="takehome_Ex_03_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatterstats</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> HDBRoom,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> price_per_sqm,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> remaining_lease,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">marginal =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(HDBRoom<span class="sc">$</span>storey_range)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 07 TO 09 04 TO 06 01 TO 03 10 TO 12 13 TO 15 25 TO 27 16 TO 18 19 TO 21
+ [9] 22 TO 24 28 TO 30 34 TO 36 31 TO 33 37 TO 39 40 TO 42 43 TO 45 49 TO 51
+[17] 46 TO 48
+17 Levels: 07 TO 09 04 TO 06 01 TO 03 10 TO 12 13 TO 15 25 TO 27 ... 46 TO 48</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>rmlease_month <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"[monthsmonth]"</span>, <span class="st">" "</span>, HDBRoom<span class="sc">$</span>rmlease_month) <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>(HDBRoom<span class="sc">$</span>rmlease_month) <span class="sc">/</span> <span class="dv">12</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>rmlease <span class="ot">&lt;-</span> HDBRoom<span class="sc">$</span>rmlease_years <span class="sc">+</span> HDBRoom<span class="sc">$</span>rmlease_month </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>storey_range <span class="ot">&lt;-</span> <span class="fu">str_replace</span>(HDBRoom<span class="sc">$</span>storey_range, <span class="st">"TO"</span>, <span class="st">"-"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>rep_sr <span class="ot">=</span> <span class="fu">c</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"22 - 24"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"25 - 27"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"28 - 30"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"31 - 33"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"34 - 36"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"37 - 39"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"40 - 42"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"43 - 45"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"49 - 51"</span><span class="ot">=</span><span class="st">"&gt; 21"</span>, </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"46 - 48"</span><span class="ot">=</span><span class="st">"&gt; 21"</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>storey_range <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(HDBRoom<span class="sc">$</span>storey_range, rep_sr)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>sr_sort <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"01 - 03"</span>, <span class="st">"04 - 06"</span>, <span class="st">"07 - 09"</span>, <span class="st">"10 - 12"</span>, <span class="st">"13 - 15"</span>, <span class="st">"16 - 18"</span>, <span class="st">"19 - 21"</span>, <span class="st">"&gt; 21"</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>HDBRoom<span class="sc">$</span>storey_range <span class="ot">&lt;-</span> <span class="fu">factor</span> (HDBRoom<span class="sc">$</span>storey_range, <span class="at">levels =</span> sr_sort)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> HDBRoom,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span>storey_range)) <span class="sc">+</span> <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="takehome_Ex_03_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="takehome_Ex_03_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>HDBDATA <span class="ot">&lt;-</span> HDBRoom [,<span class="sc">!</span><span class="fu">names</span>(HDBRoom) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"year"</span>, <span class="st">"block"</span>, <span class="st">"street_name"</span>, <span class="st">"rmlease_years"</span>, <span class="st">"rmlease_month"</span>)]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>HDBDATA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 24,374 × 10
+   month town    flat_…¹ store…² floor…³ flat_…⁴ lease…⁵ resal…⁶ price…⁷ rmlease
+   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;fct&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 01    ANG MO… 3 ROOM  07 - 09      73 New Ge…    1977  358000   4904.    54.4
+ 2 01    ANG MO… 3 ROOM  07 - 09      67 New Ge…    1978  355000   5299.    55.1
+ 3 01    ANG MO… 3 ROOM  07 - 09      68 New Ge…    1981  338000   4971.    NA  
+ 4 01    ANG MO… 3 ROOM  07 - 09      82 New Ge…    1980  420000   5122.    57.2
+ 5 01    ANG MO… 3 ROOM  04 - 06      67 New Ge…    1980  328000   4896.    57.1
+ 6 01    ANG MO… 3 ROOM  01 - 03      83 New Ge…    1979  360000   4337.    56.6
+ 7 01    ANG MO… 3 ROOM  01 - 03      67 New Ge…    1980  300000   4478.    57.2
+ 8 01    ANG MO… 3 ROOM  04 - 06      67 New Ge…    1979  333000   4970.    56.1
+ 9 01    ANG MO… 3 ROOM  04 - 06      67 New Ge…    1979  386000   5761.    56.1
+10 01    ANG MO… 3 ROOM  10 - 12      67 New Ge…    1980  330000   4925.    57.2
+# … with 24,364 more rows, and abbreviated variable names ¹​flat_type,
+#   ²​storey_range, ³​floor_area_sqm, ⁴​flat_model, ⁵​lease_commence_date,
+#   ⁶​resale_price, ⁷​price_per_sqm</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gghistostats</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> HDBDATA, <span class="at">x =</span> <span class="st">"floor_area_sqm"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"bayes"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">test.value =</span> <span class="dv">100</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Floor Area (sqm) of property sold"</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="takehome_Ex_03_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 
