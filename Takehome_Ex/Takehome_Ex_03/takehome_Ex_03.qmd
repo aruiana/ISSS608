@@ -1,0 +1,50 @@
+---
+title: "Take Home Ex 2"
+author: "Aruiana"
+date: 5 Feb 2023
+date-modified: "`r Sys.Date()`"
+execute: 
+  echo: true
+  eval: true
+  warning: false
+format: html
+editor: visual
+---
+
+```{r}
+pacman::p_load(tidyverse, plotly, crosstalk, DT, ggdist, gganimate, ggstatsplot)
+
+HDB <- read_csv(("data/HDB.csv"))
+
+HDB$price_per_sqm <- (HDB$resale_price / HDB$floor_area_sqm)
+HDB$age <- (2023 - HDB$lease_commence_date)
+
+
+HDB
+
+```
+
+```{r}
+HDBRoom <- HDB %>% filter(flat_type=="3 ROOM" | flat_type=="4 ROOM" | flat_type=="5 ROOM")
+
+HDBRoom
+
+```
+
+```{r}
+gghistostats(
+  data = HDBRoom, x = "floor_area_sqm",
+  type = "bayes",
+  test.value = 100,
+  xlab = "Floor Area (sqm) of property sold"
+  )
+```
+
+```{r}
+ggscatterstats(
+  data = HDBRoom,
+  x = price_per_sqm,
+  y = remaining_lease,
+  marginal = FALSE,
+  )
+```

@@ -1,0 +1,62 @@
+---
+title: "In-Class Ex 5a"
+author: "Aruiana"
+date: 11 Feb 2023
+date-modified: "`r Sys.Date()`"
+execute: 
+  echo: true
+  eval: true
+  warning: false
+format: html
+editor: visual
+---
+
+```{r}
+pacman::p_load(seriation, dendextend, heatmaply, corrplot, tidyverse, ggstatsplot)
+```
+
+```{r}
+wine <- read_csv(("data/wine_quality.csv"))
+```
+
+```{r}
+pairs(wine[,1:11])
+```
+```{r}
+#| fig-width: 7
+#| fig-height: 7
+
+ggstatsplot::ggcorrmat(
+  data = wine, 
+  cor.vars = 1:11,
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 10),
+  title    = "Correlogram for wine dataset",
+  subtitle = "Four pairs are no significant at p < 0.05"
+)
+```
+
+```{r}
+wine.cor <- cor(wine[, 1:11])
+corrplot.mixed(wine.cor, 
+               lower = "ellipse", 
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               tl.col = "black")
+```
+```{r}
+wh <- read_csv("data/WHData-2018.csv")
+row.names(wh) <- wh$Country
+wh1 <- dplyr::select(wh, c(3, 7:12))
+wh_matrix <- data.matrix(wh)
+```
+
+```{r}
+wh_heatmap <- heatmap(wh_matrix,
+                      Rowv=NA, Colv=NA)
+```
+```{r}
+heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
+```
