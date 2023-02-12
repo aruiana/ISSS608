@@ -106,17 +106,6 @@ ggbetweenstats(
 ```
 
 ```{r}
-plot_ly(data = HDBDATA, 
-        x = ~price_per_sqm, 
-        y = ~storey_range,
-        text = ~paste("Town:", town,     
-                      "<br>Remaining Lease in years:", rmlease),  
-        color = ~flat_type, 
-        colors = "Set1") %>%
-  layout(title = 'Price per Sqm vs Flat storey ')
-```
-
-```{r}
 ggscatterstats(
   data = HDBDATA,
   x = resale_price,
@@ -126,7 +115,7 @@ ggscatterstats(
 ```
 
 ```{r}
-o
+
 ggplot(data = HDBDATA,
        aes(y = town,
            x = price_per_sqm)) + 
