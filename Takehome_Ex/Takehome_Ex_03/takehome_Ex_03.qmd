@@ -1,5 +1,5 @@
 ---
-title: "Take Home Ex 2"
+title: "Take Home Ex 3"
 author: "Aruiana"
 date: 5 Feb 2023
 date-modified: "`r Sys.Date()`"
@@ -31,6 +31,9 @@ HDBRoom <- HDB %>% filter(flat_type=="3 ROOM" | flat_type=="4 ROOM" | flat_type=
 
 HDBRoom$rmlease_years <- as.numeric(HDBRoom$rmlease_years)
 
+HDBRoom$rmlease_month <- gsub("[monthsmonth]", " ", HDBRoom$rmlease_month) %>%
+  as.numeric(HDBRoom$rmlease_month) / 12 
+
 HDBRoom
 
 ```
@@ -47,10 +50,10 @@ unique(HDBRoom$storey_range)
 ```
 
 ```{r}
-HDBRoom$rmlease_month <- gsub("[monthsmonth]", " ", HDBRoom$rmlease_month) %>%
-  as.numeric(HDBRoom$rmlease_month) / 12 
 
-HDBRoom$rmlease <- HDBRoom$rmlease_years + HDBRoom$rmlease_month 
+HDBRoom$rmlease_month[is.na(HDBRoom$rmlease_month)] = 0
+
+HDBRoom$rmlease <- as.numeric(HDBRoom$rmlease_years + HDBRoom$rmlease_month)
 
 HDBRoom$storey_range <- str_replace(HDBRoom$storey_range, "TO", "-")
 
@@ -78,7 +81,7 @@ ggplot(data = HDBRoom,
 ```
 
 ```{r}
-HDBDATA <- HDBRoom [,!names(HDBRoom) %in% c("year", "block", "street_name", "rmlease_years", "rmlease_month")]
+HDBDATA <- HDBRoom [,!names(HDBRoom) %in% c("year", "block", "street_name", "rmlease_years", "rmlease_month", "flat_model")]
 
 HDBDATA
 ```
@@ -90,4 +93,44 @@ gghistostats(
   test.value = 100,
   xlab = "Floor Area (sqm) of property sold"
   )
+```
+
+```{r}
+ggbetweenstats(
+  data = HDBDATA,
+  x = flat_type, 
+  y = price_per_sqm,
+  type = "np",
+  messages = FALSE
+)
+```
+
+```{r}
+plot_ly(data = HDBDATA, 
+        x = ~price_per_sqm, 
+        y = ~storey_range,
+        text = ~paste("Town:", town,     
+                      "<br>Remaining Lease in years:", rmlease),  
+        color = ~flat_type, 
+        colors = "Set1") %>%
+  layout(title = 'Price per Sqm vs Flat storey ')
+```
+
+```{r}
+ggscatterstats(
+  data = HDBDATA,
+  x = resale_price,
+  y = rmlease,
+  marginal = FALSE,
+  )
+```
+
+```{r}
+ggplot(data = HDBDATA,
+       aes(y = reorder(price_per_sqm,town),
+           x = price_per_sqm)) + 
+  geom_boxplot() +
+  geom_point(stat ="summary",
+             colour = "red",) + 
+  ylab("Towns") 
 ```

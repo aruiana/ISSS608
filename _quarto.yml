@@ -23,7 +23,7 @@ website:
           href: "Takehome_Ex/Takehome_Ex_01/takehome_Ex_01.html"
         - text: "Takehome Ex 2"
           href: "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html"
-        - text: "Takehome Ex 3"
+
     right:
       - href: index.qmd
         text: Home
