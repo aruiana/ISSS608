@@ -24,7 +24,6 @@ website:
         - text: "Takehome Ex 2"
           href: "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html"
         - text: "Takehome Ex 3"
-          href: "Takehome_Ex/Takehome_Ex_03/takehome_Ex_03.html"
     right:
       - href: index.qmd
         text: Home
