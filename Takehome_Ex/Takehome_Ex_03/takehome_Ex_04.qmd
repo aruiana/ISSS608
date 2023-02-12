@@ -126,11 +126,9 @@ ggscatterstats(
 ```
 
 ```{r}
+o
 ggplot(data = HDBDATA,
-       aes(y = reorder(price_per_sqm,town),
+       aes(y = town,
            x = price_per_sqm)) + 
-  geom_boxplot() +
-  geom_point(stat ="summary",
-             colour = "red",) + 
-  ylab("Towns") 
+  geom_boxplot()
 ```
