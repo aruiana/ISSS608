@@ -3,10 +3,6 @@ title: "Take Home Ex 3"
 author: "Aruiana"
 date: 5 Feb 2023
 date-modified: "`r Sys.Date()`"
-execute: 
-  echo: false
-  eval: true
-  warning: false
 format: html
 editor: visual
 ---
@@ -38,8 +34,8 @@ HDB <- read_csv(("data/HDB.csv"))
 
 ## Step3: Filter Data for the study
 
-Filter out the data required: \
-1. Room Type \
+Filter out the data required:\
+1. Room Type\
 2. Year 2022
 
 ```{r}
@@ -52,12 +48,12 @@ HDBRoom <- HDB %>% filter(flat_type=="3 ROOM" | flat_type=="4 ROOM" | flat_type=
   separate(remaining_lease, into = c("rmlease_years", "rmlease_month"), sep = "years") 
 ```
 
-## Step 4: Amend Data Set 
+## Step 4: Amend Data Set
 
-1\. Convert the Month from Character to Number \
-2. Convert Remaining lease from Character to Number \
-3. Re-categorise towns into regions \
-4. Sort Storey Range by smallest to largest \
+1\. Convert the Month from Character to Number\
+2. Convert Remaining lease from Character to Number\
+3. Re-categorise towns into regions\
+4. Sort Storey Range by smallest to largest\
 5. Create new dataset for price/sqm
 
 ```{r}
@@ -331,6 +327,6 @@ a
 
 From this animated graph over the cross of 12 months, we can tell that there is no hugh fluctuations in property prices by the price for each region is relatively stable with the exception of Central whose prices should be driven other factors.
 
-Legend: \
+Legend:\
 Size of dot: Size of Property\
 Colour: by Region (Consistent with graphs above)
