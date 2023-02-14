@@ -4,10 +4,13 @@ author: "Aruiana"
 date: 5 Feb 2023
 date-modified: "`r Sys.Date()`"
 execute: 
-  echo: true
+  echo: false
   eval: true
   warning: false
-format: html
+format: 
+  html: 
+  code-fold: true
+  code-summary: "Show the code"
 editor: visual
 ---
 
