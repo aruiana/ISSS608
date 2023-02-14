@@ -9,6 +9,8 @@ execute:
   warning: false
 format: html
 editor: visual
+#| code-fold: true
+#| code-summary: "Show"
 ---
 
 # 1. The Task
