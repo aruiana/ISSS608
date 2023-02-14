@@ -1,0 +1,224 @@
+---
+title: "Take Home Ex 3"
+author: "Aruiana"
+date: 5 Feb 2023
+date-modified: "`r Sys.Date()`"
+execute: 
+  echo: true
+  eval: true
+  warning: false
+format: html
+editor: visual
+---
+
+# 1. The Task
+
+To uncover the salient patterns of the resale prices of public housing property by residential towns and estates in Singapore by using appropriate analytical visualisation techniques l
+
+For the purpose of this study, the focus in on **3-ROOM, 4-ROOM and 5-ROOM types** in **2022**.
+
+# 2. Data Preparation
+
+##Step 1: Load Packages
+```{r}
+pacman::p_load(tidyverse, plotly, crosstalk, DT, ggdist, gganimate, ggstatsplot, heatmaply)
+```
+
+
+##Step 2: Import Data
+
+```{r}
+#import data
+HDB <- read_csv(("data/HDB.csv"))
+```
+
+##Step3: Filter Data for the study
+
+Filter out the data required:
+1. Room Type
+2. Year 2022
+
+```{r}
+
+#Filter 3Room, 4Room, 5Room, Filter 2022, Convert remaining lease into years
+HDBRoom <- HDB %>% filter(flat_type=="3 ROOM" | flat_type=="4 ROOM" | flat_type=="5 ROOM") %>%
+  separate(month, into = c("year", "month")) %>% 
+  filter(year == "2022") %>%
+  separate(remaining_lease, into = c("rmlease_years", "rmlease_month"), sep = "years") 
+```
+
+##Step 4: Amend Data Set
+1. Convert the Month from Character to Number
+2. Convert Remaining lease from Character to Number
+3. Re-categorise towns into regions
+4. Sort Storey Range by smallest to largest
+5. Create new dataset for price/sqm
+
+```{r}
+
+#Convert Month from Chr to number
+HDBRoom$month <- as.numeric(HDBRoom$month)
+
+#Convert Remaining lease into numeric years in decimal
+HDBRoom$rmlease_years <- as.numeric(HDBRoom$rmlease_years)
+
+HDBRoom$rmlease_month <- gsub("[monthsmonth]", " ", HDBRoom$rmlease_month) %>%
+  as.numeric(HDBRoom$rmlease_month) / 12 
+
+HDBRoom$rmlease_month[is.na(HDBRoom$rmlease_month)] = 0
+
+HDBRoom$rmlease <- as.numeric(HDBRoom$rmlease_years + HDBRoom$rmlease_month)
+
+#Group Towns into Regions
+HDBRoom$region <- case_when(
+  HDBRoom$town %in% c("ANG MO KIO", "HOUGANG", "PUNGGOL", "SERANGOON", "SENGKANG") ~ "North-East",
+    HDBRoom$town %in% c("BISHAN", "BUKIT MERAH", "BUKIT TIMAH", "CENTRAL AREA", "GEYLANG", "KALLANG/WHAMPOA", "MARINE PARADE", "QUEENSTOWN", "TOA PAYOH") ~ "Central",
+    HDBRoom$town %in% c("BEDOK", "PASIR RIS", "TAMPINES") ~ "East",
+    HDBRoom$town %in% c("SEMBAWANG", "WOODLANDS", "YISHUN") ~ "North",
+    HDBRoom$town %in% c("BUKIT BATOK", "BUKIT PANJANG", "CHOA CHU KANG", "CLEMENTI", "JURONG EAST", "JURONG WEST") ~ "West")
+
+
+#Edit storey range and sort by smallest
+HDBRoom$storey_range <- str_replace(HDBRoom$storey_range, "TO", "-")
+
+sr_sort = c("01 - 03", "04 - 06", "07 - 09", "10 - 12", "13 - 15", "16 - 18", "19 - 21", "22 - 24","25 - 27","28 - 30", "31 - 33", "34 - 36", "37 - 39", "40 - 42", "43 - 45", "49 - 51", "46 - 48")
+
+HDBRoom$storey_range <- factor (HDBRoom$storey_range, levels = sr_sort)
+
+#Create additional data on price per sqm
+HDBRoom$price_per_sqm <- (HDBRoom$resale_price / HDBRoom$floor_area_sqm)
+```
+
+##Step 5: Select the relevant columns for analysis
+```{r}
+HDBDATA <- HDBRoom [,!names(HDBRoom) %in% c("year", "block", "street_name", "rmlease_years", "rmlease_month", "flat_model")]
+```
+
+```{r}
+gghistostats(
+  data = HDBDATA, x = "floor_area_sqm",
+  type = "bayes",
+  test.value = 100,
+  xlab = "Floor Area (sqm) of property sold"
+  )
+```
+
+```{r}
+ggbetweenstats(
+  data = HDBDATA,
+  x = flat_type, 
+  y = resale_price,
+  type = "np",
+  messages = FALSE
+)
+```
+
+```{r}
+ggscatterstats(
+  data = HDBDATA,
+  x = resale_price,
+  y = price_per_sqm,
+  marginal = FALSE,
+  )
+```
+
+```{r}
+options(scipen = 999)
+mean(HDBDATA$resale_price)
+min(HDBDATA$resale_price)
+max(HDBDATA$resale_price)
+
+mean(HDBDATA$price_per_sqm)
+min(HDBDATA$price_per_sqm)
+max(HDBDATA$price_per_sqm)
+```
+
+```{r}
+scdata <- highlight_key(HDBDATA) 
+  
+sc1 <- ggplot(data = scdata, aes(x = town, y = resale_price, fill = region)) + geom_point() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + scale_y_continuous(breaks = c(200000,500000,1000000,150000)) +
+  labs(title = "Resale Price by Town", x = "Town", y = "Resale Price")
+
+sc2 <- ggplot(data = scdata, aes(x = town, y = price_per_sqm, fill = region)) + geom_point() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) + scale_y_continuous(breaks = c(3000,6000,9000,12000,15000)) +
+    labs(title = "Resale Price per sqm by Town", x = "Town", y = "Resale Price/Sqm")
+
+subplot(ggplotly(sc1), ggplotly(sc2))
+
+```
+
+```{r}
+HDBDATA %>%
+  mutate(class = fct_reorder(town, price_per_sqm, .fun="mean")) %>%
+  ggplot(aes(y =reorder(town, price_per_sqm),
+           x = price_per_sqm, fill = region)) + 
+  geom_boxplot() + stat_summary(fun.y=mean, geom = "point", colour="yellow")
+
+```
+
+```{r}
+HDBDATA %>% 
+  group_by(region) %>%
+  mutate(class = fct_reorder(region, price_per_sqm, .fun="mean")) %>%
+  ggplot(mapping = aes(y = flat_type, x = price_per_sqm)) +
+  # Make grouped boxplot
+  geom_boxplot(aes(fill = as.factor(region))) +
+  theme(legend.position = "top") +
+  # Adjust lables and add title
+  labs(title = "HDB resale prices in 2022 by region", y="Flat Type", x = "Price per square metre (SGD)", fill = "flat_type")
+
+```
+
+```{r}
+
+HDBDATA %>%
+  
+grouped_gghistostats(
+  x                 = resale_price,
+  test.value        = 50,
+  type              = "nonparametric",
+  grouping.var      = region,
+  normal.curve      = TRUE,
+  normal.curve.args = list(color = "red", size = 1),
+  ggtheme           = ggthemes::theme_tufte(),
+  ## modify the defaults from `{ggstatsplot}` for each plot
+  plotgrid.args     = list(nrow = 2),
+  annotation.args   = list(title = "Resale price by region")
+)
+```
+
+```{r}
+floorheatmap <-
+  HDBDATA %>%
+  group_by(town, storey_range) %>%
+  summarise(median_price = median(price_per_sqm))
+
+heatmap <- ggplot(data = floorheatmap, 
+                  mapping = aes(x = town, y = storey_range, fill = median_price)) +
+            geom_tile() +
+  labs(title = "Heatmap of HDB breakdown by area and storey", x = "Town", y = "Storey") +
+  scale_fill_gradient(name = "Median Resale Price/sqm",
+                      low = "peachpuff",
+                      high = "deeppink4")+
+theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+heatmap
+```
+
+```{r}
+a <-
+ggplot(HDBDATA, aes(x = rmlease, y = resale_price, 
+                      size = floor_area_sqm, 
+                      colour = region)) +
+  geom_point(alpha = 0.7, 
+             show.legend = FALSE) +
+  scale_size(range = c(2, 12)) +
+  labs(title = '2022: {as.integer(frame_time)} Month', 
+       x = 'Remaining Lease', 
+       y = 'Resale Price') +
+  transition_time(month) +       #<<
+  ease_aes('linear')            #<<
+
+a
+```

@@ -12,7 +12,7 @@ editor: visual
 ---
 
 ```{r}
-pacman::p_load(ggtern, plotly, tidyverse)
+pacman::p_load(ggtern, plotly, tidyverse, heatmaply)
 ```
 
 ```{r}
@@ -33,4 +33,11 @@ ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   geom_point() +
   labs(title="Population structure, 2015") +
   theme_rgbw()
+```
+
+```{r}
+heatmaply(agpop_mutated)
+```
+
+```{}
 ```
