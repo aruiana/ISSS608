@@ -83,7 +83,7 @@ HDBRoom$region <- case_when(
 #Edit storey range and sort by smallest
 HDBRoom$storey_range <- str_replace(HDBRoom$storey_range, "TO", "-")
 
-sr_sort = c("01 - 03", "04 - 06", "07 - 09", "10 - 12", "13 - 15", "16 - 18", "19 - 21", "22 - 24","25 - 27","28 - 30", "31 - 33", "34 - 36", "37 - 39", "40 - 42", "43 - 45", "49 - 51", "46 - 48")
+sr_sort = c("01 - 03", "04 - 06", "07 - 09", "10 - 12", "13 - 15", "16 - 18", "19 - 21", "22 - 24","25 - 27","28 - 30", "31 - 33", "34 - 36", "37 - 39", "40 - 42", "43 - 45", "46 - 48", "49 - 51")
 
 HDBRoom$storey_range <- factor (HDBRoom$storey_range, levels = sr_sort)
 
