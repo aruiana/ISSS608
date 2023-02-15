@@ -103,7 +103,7 @@ HDBDATA <- HDBRoom [,!names(HDBRoom) %in% c("year", "block", "street_name", "rml
 
 ```
 
-## 3. Data Analytics
+# 3. Data Analytics
 
 ### 3.1 Histogram of dataset
 
@@ -331,7 +331,7 @@ Legend:\
 Size of dot: Size of Property\
 Colour: by Region (Consistent with graphs above)
 
-## Conclusion
+# Conclusion
 
 Singapore's property prices are rather stable. This can be seen as the price over time and price/sqm did not have huge fluctuation or price differences.
 
