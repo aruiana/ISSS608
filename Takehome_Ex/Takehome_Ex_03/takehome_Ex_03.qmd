@@ -280,7 +280,7 @@ Using this boxplot, we can tell that there is a huge price gap by location with 
 
 For 3 room flats, there is not much price discrepancies.
 
-### 3.6 Price by Storey
+### 3.8 Price by Storey
 
 ```{r}
 #| code-fold: true
@@ -304,7 +304,7 @@ heatmap
 
 With this heatmap, we can confirm that the higher the storey leve, the higher the price. Jurong West and Geylang are the only exceptions where there is property which are cheaper for a lower level. These could be exceptions where other factors such as number of years on remaining lease comes into play. Referencing to the graph in 3.1, the property in Geylang and Jurong have varied aged property.
 
-### 3.6 Property Price over time in 2022
+### 3.9 Property Price over time in 2022
 
 ```{r}
 #| code-fold: true
@@ -330,3 +330,9 @@ From this animated graph over the cross of 12 months, we can tell that there is 
 Legend:\
 Size of dot: Size of Property\
 Colour: by Region (Consistent with graphs above)
+
+## Conclusion
+
+Singapore's property prices are rather stable. This can be seen as the price over time and price/sqm did not have huge fluctuation or price differences.
+
+Property prices are highly affected by storey and price differences are mainly due to location.
