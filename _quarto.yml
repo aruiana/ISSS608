@@ -2,11 +2,36 @@ project:
   type: website
 
 website:
-  title: "ISSS608"
-  navbar:
-    left:
-    - text: "In Class Excercise"
-      menu:
+  title: "Ari's ISSS608 Journey"
+  site-url: "https://arianatan-jan23isss608.netlify.app/"
+  sidebar:
+    background: "#451a26"
+    logo: "images/logo.png"
+    pinned: true
+    align: center
+    tools:
+      - icon: house-fill
+        href: "https://arianatan-jan23isss608.netlify.app/"
+        text: "Home"
+      - icon: github
+        href: "https://github.com/aruiana/ISSS608"
+        text: "GitHub"
+      - icon: bar-chart-fill
+        href: "https://public.tableau.com/app/profile/ariana.tan6501"
+        text: "Tableau"
+      - icon: linkedin
+        href: "https://www.linkedin.com/in/arianatan/"
+        text: "LinkedIn"
+      - icon: envelope-fill
+        href: "mailto:ariana.tan.2021@mitb.smu.edu.sg"
+        text: "Email"  
+
+    style: "docked"
+    search: true
+    collapse-level: 1
+    contents:
+      - section: "Take-Home Exercise"
+        contents:
         - text: "In Class Ex1"
           href: "Hands-on_EX01/Hands-on_Ex01/hands-on_Ex01.html"
         - text: "In Class Ex3"
@@ -17,23 +42,17 @@ website:
           href: "In-Class_EX05/In_Class05.html"
         - text: "In Class Ex5b"
           href: "In-Class_EX05/In_Class05b.html"
-        - text: "In Class Ex5c"
-          href: "Takehome_Ex/Takehome_Ex_03/takehome_Ex_03.html"
-    - text: "Take-home Excercise"
-      menu:
+      - section: "Hands-on Exercise"
+        contents:
         - text: "Takehome Ex 1"
           href: "Takehome_Ex/Takehome_Ex_01/takehome_Ex_01.html"
         - text: "Takehome Ex 2"
           href: "Takehome_Ex/Takehome_Ex_02/takehome_Ex_02.html"
-
-    right:
-      - href: index.qmd
-        text: Home
-      - about.qmd
-
+        - text: "Takehome Ex 3"
+          href: "Takehome_Ex/Takehome_Ex_03/takehome_Ex_03.html"
 format:
   html:
-    theme: lux
+    theme: journal
     css: styles.css
     toc: true
 
