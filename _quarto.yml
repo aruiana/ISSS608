@@ -30,7 +30,7 @@ website:
     search: true
     collapse-level: 1
     contents:
-      - section: "Take-Home Exercise"
+      - section: "In Class Exercise"
         contents:
         - text: "In Class Ex1"
           href: "Hands-on_EX01/Hands-on_Ex01/hands-on_Ex01.html"
@@ -42,7 +42,8 @@ website:
           href: "In-Class_EX05/In_Class05.html"
         - text: "In Class Ex5b"
           href: "In-Class_EX05/In_Class05b.html"
-      - section: "Hands-on Exercise"
+          
+      - section: "Takehome Exercise"
         contents:
         - text: "Takehome Ex 1"
           href: "Takehome_Ex/Takehome_Ex_01/takehome_Ex_01.html"
