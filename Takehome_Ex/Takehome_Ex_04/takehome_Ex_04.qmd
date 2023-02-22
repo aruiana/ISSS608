@@ -1,0 +1,290 @@
+---
+title: "Take Home Ex 4"
+author: "Aruiana"
+date: 21 Feb 2023
+date-modified: "`r Sys.Date()`"
+format: html
+editor: visual
+---
+
+# 1. The Task
+
+To uncover the impact of COVID-1 and global economic and political dynamics happening in 2022 on Singapore bi-lateral trade.
+
+For the purpose of this study, the focus in on **January 2020 to Dec 2022**.
+
+# 2. Data Preparation
+
+## Step 1: Load Packages
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+pacman::p_load(scales, viridis, lubridate, ggthemes, gridExtra, readxl, knitr, data.table, CGPfunctions, ggHoriPlot, tidyverse, datawizard)
+```
+
+## Step 2: Import Data
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+#import data
+i <- data_transpose(read_xlsx("data/outputFile.xlsx", sheet = "T1", range = "A10:AK129" ), rownames = "imtime", colnames = TRUE)
+
+e <- data_transpose(read_xlsx("data/outputFile.xlsx", sheet = "T2", range = "A10:AK101" ), rownames = "extime", colnames = TRUE)
+```
+
+## Step3: Clean Data (Import)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+
+#convert data to raw figures
+importdata <- i %>%
+  mutate_at(vars(contains('Thousand Dollars')), ~ (. *1000)) %>%      
+  mutate_at(vars(contains('Million Dollars')), ~ (. *1000000)) %>%
+  separate(imtime, into = c("year", "month"))
+
+
+#remove legend
+colnames(importdata) <- gsub(" (Thousand Dollars)", "", colnames(importdata), fixed = TRUE)
+colnames(importdata) <- gsub(" (Million Dollars)", "", colnames(importdata), fixed = TRUE)
+colnames(importdata) <-gsub('Vietnam, Socialist Republic Of', 'Vietnam',gsub('Germany, Federal Republic Of', 'Germany', gsub('Republic of Korea', 'Korea', colnames(importdata))))
+
+#convert date to numbers
+importdata$month <- gsub('Dec', '12', gsub('Nov','11', gsub('Oct','10',gsub('Sep','09',gsub('Aug','08', gsub('Jul','07', gsub('Jun', '06', gsub('May', '05',gsub('Apr','04', gsub('Mar','03', gsub('Feb','02', gsub('Jan','01',importdata$month)))))))))))) %>% as.numeric(importdata$month)
+
+importdata$year <- as.numeric(importdata$year)
+
+
+#extract only country data and non-zero data
+imd <- importdata [,!names(importdata) %in% c("Total Merchandise Imports", "Europe", "America", "Asia", "Europe", "Oceania", "Africa", "European Union","Commonwealth Of Independent States")]
+import_use <- imd[, colSums(imd) != 0]
+
+
+import_use$time = as.Date(paste(import_use$year,"-",import_use$month,"-01",sep = ""))
+
+imd2 <- import_use [,!names(import_use) %in% c("year", "month")]
+
+impexp <- imd2 %>% pivot_longer(!time, names_to = "Country", values_to = "Import")
+
+
+```
+
+## Step4: Clean Data (Export)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+
+#repeat data cleaning for export
+
+#convert data to raw figures
+exportdata <- e %>%
+  mutate_at(vars(contains('Thousand Dollars')), ~ (. *1000)) %>%      
+  mutate_at(vars(contains('Million Dollars')), ~ (. *1000000)) %>%
+  separate(extime, into = c("year", "month"))
+
+
+#remove legend
+colnames(exportdata) <- gsub(" (Thousand Dollars)", "", colnames(exportdata), fixed = TRUE)
+colnames(exportdata) <- gsub(" (Million Dollars)", "", colnames(exportdata), fixed = TRUE)
+colnames(exportdata) <-gsub('Vietnam, Socialist Republic Of', 'Vietnam',gsub('Germany, Federal Republic Of', 'Germany',gsub('Republic of Korea', 'Korea', colnames(exportdata))))
+
+#convert date to numbers
+exportdata$month <- gsub('Dec', '12', gsub('Nov','11', gsub('Oct','10',gsub('Sep','09',gsub('Aug','08', gsub('Jul','07', gsub('Jun', '06', gsub('May', '05',gsub('Apr','04', gsub('Mar','03', gsub('Feb','02', gsub('Jan','01',exportdata$month)))))))))))) %>% as.numeric(exportdata$month)
+
+exportdata$year <- as.numeric(exportdata$year)
+
+
+#extract only country data and non-zero data
+exd <- exportdata [,!names(exportdata) %in% c("Total Merchandise Exports", "Europe", "America", "Asia", "Europe", "Oceania", "Africa", "European Union", "Commonwealth Of Independent States")]
+export_use <- exd[, colSums(exd) != 0]
+
+
+export_use$time = as.Date(paste(export_use$year,"-",export_use$month,"-01",sep = ""))
+
+exd2 <- export_use [,!names(export_use) %in% c("year", "month")]
+
+impexp2 <- exd2 %>% pivot_longer(!time, names_to = "Country", values_to = "Export")
+
+```
+
+## Step 5: Combine Data
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+impexp_use <- merge(x=impexp,y=impexp2,by.x=c("time","Country"),by.y=c("time","Country"),all.x = TRUE,all.y = TRUE)
+  
+impexp_use[is.na(impexp_use)] = 0
+
+impexp_use$nett <- impexp_use$Export - impexp_use$Import
+```
+
+## Step 6: List top import countries
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+ImTop_2020 <- impexp_use %>%
+  filter(time < '2021-01-01') %>%
+  group_by(Country) %>%
+  summarise(Imp2010 = sum(Import)) %>%
+  top_n(n=10, wt=Imp2010) %>%
+  arrange(desc(Imp2010))
+
+ImTop_2021 <- impexp_use %>%
+  filter(time >='2021-01-01' & time <='2021-12-31')  %>%
+  group_by(Country) %>%
+  summarise(Imp2110 = sum(Import)) %>%
+  top_n(n=10, wt=Imp2110) %>%
+  arrange(desc(Imp2110))
+
+ImTop_2022 <- impexp_use %>%
+  filter(time > '2022-01-01') %>%
+  group_by(Country) %>%
+  summarise(Imp2210 = sum(Import)) %>%
+  top_n(n=10, wt=Imp2210) %>%
+  arrange(desc(Imp2210))
+
+AllImtop10 <- c(ImTop_2020$Country, ImTop_2021$Country, ImTop_2022$Country)
+Top10Import <- unique(AllImtop10)
+
+
+ImTop10 <- impexp_use %>%
+ filter(Country %in% Top10Import)
+
+```
+
+## Step 6: List top export countries
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+ExTop_2020 <- impexp_use %>%
+  filter(time < '2021-01-01') %>%
+  group_by(Country) %>%
+  summarise(Exp2010 = sum(Export)) %>%
+  top_n(n=10, wt=Exp2010) %>%
+  arrange(desc(Exp2010))
+
+ExTop_2021 <- impexp_use %>%
+  filter(time >='2021-01-01' & time <='2021-12-31')  %>%
+  group_by(Country) %>%
+  summarise(Exp2110 = sum(Export)) %>%
+  top_n(n=10, wt=Exp2110) %>%
+  arrange(desc(Exp2110))
+
+ExTop_2022 <- impexp_use %>%
+  filter(time > '2022-01-01') %>%
+  group_by(Country) %>%
+  summarise(Exp2210 = sum(Export)) %>%
+  top_n(n=10, wt=Exp2210) %>%
+  arrange(desc(Exp2210))
+
+AllExtop10 <- c(ExTop_2020$Country, ExTop_2021$Country, ExTop_2022$Country)
+Top10Export <- unique(AllExtop10)
+
+ExTop10 <- impexp_use %>%
+ filter(Country %in% Top10Export)
+
+Alltop10 <- c(ExTop_2020$Country, ExTop_2021$Country, ExTop_2022$Country, ImTop_2020$Country, ImTop_2021$Country, ImTop_2022$Country)
+Top10 <- unique(Alltop10)
+
+IETop10 <- impexp_use %>%
+ filter(Country %in% Top10)
+
+```
+
+
+#cycleplot
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+options(scipen = 999)
+hline.data <- export_use %>% 
+  group_by(month) %>%
+  summarise(avgvalue = mean(Belgium))
+
+xbrks <- seq(2020,2022,1)
+ggplot() + 
+  geom_line(data=export_use,
+            aes(x=year, 
+                y=Belgium, 
+                group=month), 
+            colour="black") +   
+  geom_hline(aes(yintercept= avgvalue), 
+             data=hline.data, 
+             linetype=6, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) + 
+  labs(axis.text.x = element_blank(),
+       title = "Export to Belgium") +
+  xlab("Year") +
+  ylab("$") + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) + scale_x_continuous(breaks=xbrks)
+
+```
+
+```{r}
+
+cycle_ard <- function(country){
+  options(scipen = 999)
+  hline.data <- export_use %>% 
+    group_by(month) %>%
+    summarise(avgvalue = mean(country))
+  
+  xbrks <- seq(2020,2022,1)
+  ggplot() + 
+    geom_line(data=export_use,
+              aes(x=year, 
+                  y=country, 
+                  group=month), 
+              colour="black") +   
+    geom_hline(aes(yintercept= avgvalue), 
+               data=hline.data, 
+               linetype=6, 
+               colour="red", 
+               size=0.5) + 
+    facet_grid(~month) + 
+    labs(axis.text.x = element_blank(),
+         title = paste0("Export to ",country)) +
+    xlab("Year") +
+    ylab("$") + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) + 
+    scale_x_continuous(breaks=xbrks)
+}
+
+cycle_ard("Belgium")
+
+```
+
+#slopegraph
+
+```{r}
+
+IETop10 %>% 
+  mutate(Year = factor(time)) %>%
+  filter(Year %in% c("2020-01-01","2021-01-01","2022-12-01")) %>%
+  newggslopegraph(Year, Import, Country,
+                Title = "Import by Singapore to Top countries",
+                SubTitle = "2020 to 2022", Caption = "Singapore Imports as at date")
+
+IETop10 %>% 
+  mutate(Year = factor(time)) %>%
+  filter(Year %in% c("2020-01-01","2021-01-01","2022-12-01")) %>%
+  newggslopegraph(Year, Export, Country,
+                Title = "Export by Singapore to Top countries",
+                SubTitle = "2020 to 2022", Caption = "Singapore Exports as at date")
+
+
+IETop10 %>% 
+  mutate(Year = factor(time)) %>%
+  filter(Year %in% c("2020-01-01","2021-01-01","2022-12-01")) %>%
+  newggslopegraph(Year, nett, Country,
+                Title = "Nett Import/Export by Singapore to Top countries",
+                SubTitle = "2020 to 2022", Caption = "Nett import/export as at date")
+
+```
