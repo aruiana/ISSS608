@@ -230,7 +230,8 @@ ggplot() +
 ```
 
 ```{r}
-
+#| code-fold: true
+#| code-summary: "Show"
 cycle_plot <- function(country){
   hline.data <- IETop10 %>% 
     filter(Country == country) %>%
@@ -266,13 +267,16 @@ cycle <- map(Top10, cycle_plot)
 #### Mainland China
 
 ```{r}
-#| echo: true
+#| code-fold: true
+#| code-summary: "Show"
 cycle[[1]] 
 ```
 
 #### Hong Kong
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show"
 cycle[[2]]
 ```
 :::
