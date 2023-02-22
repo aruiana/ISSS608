@@ -231,25 +231,26 @@ ggplot() +
 
 ```{r}
 
-cycle_ard <- function(country){
-  options(scipen = 999)
-  hline.data <- export_use %>% 
-    group_by(month) %>%
-    summarise(avgvalue = mean(country))
+cycle_plot <- function(country){
+  hline.data <- IETop10 %>% 
+    filter(Country == country) %>%
+    group_by(month(.data$time)) %>%
+    summarise(avgvalue = mean(Export))
   
   xbrks <- seq(2020,2022,1)
+  
   ggplot() + 
-    geom_line(data=export_use,
-              aes(x=year, 
-                  y=country, 
-                  group=month), 
+    geom_line(data=IETop10 |> filter(Country == country),
+              aes(x=year(.data$time), 
+                  y=.data$Export, 
+                  group=month(.data$time)), 
               colour="black") +   
     geom_hline(aes(yintercept= avgvalue), 
-               data=hline.data, 
+               data=hline.data,
                linetype=6, 
                colour="red", 
                size=0.5) + 
-    facet_grid(~month) + 
+    facet_grid(~month(.data$time)) + 
     labs(axis.text.x = element_blank(),
          title = paste0("Export to ",country)) +
     xlab("Year") +
@@ -257,7 +258,30 @@ cycle_ard <- function(country){
     scale_x_continuous(breaks=xbrks)
 }
 
-cycle_ard("Belgium")
+cycle <- map(Top10, cycle_plot)
+```
+
+::: {.panel-tabset}
+
+#### Mainland China
+
+```{r}
+#| echo: true
+cycle[[1]] 
+```
+
+#### Hong Kong
+
+```{r}
+cycle[[2]]
+```
+:::
+
+cycle[[3]]
+cycle[[4]]
+cycle[[5]]
+
+
 
 ```
 
@@ -286,5 +310,10 @@ IETop10 %>%
   newggslopegraph(Year, nett, Country,
                 Title = "Nett Import/Export by Singapore to Top countries",
                 SubTitle = "2020 to 2022", Caption = "Nett import/export as at date")
+
+```
+
+
+
 
 ```
