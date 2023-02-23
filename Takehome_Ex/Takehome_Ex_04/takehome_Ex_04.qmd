@@ -426,6 +426,6 @@ For Germany, it is interesting to note that there was a rise in imports during c
 
 # 4. Conclusion
 
-```{r}
+We can conclude that Singapore has a good supply chain that is not completely not reliant on one country. We have alternative sources that we can reach out to during times of need and our sources are diversified.
 
-```
+For our exports, it was not as heavily impacted during covid as the dip is not huge and Singapore recovered well post covid with hugh increase in exports.
