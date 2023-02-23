@@ -121,9 +121,11 @@ impexp_use <- merge(x=impexp,y=impexp2,by.x=c("time","Country"),by.y=c("time","C
 impexp_use[is.na(impexp_use)] = 0
 
 impexp_use$nett <- impexp_use$Export - impexp_use$Import
+impexp_use$year <- year(impexp_use$time)
+impexp_use$month <- month(impexp_use$time)
 ```
 
-## Step 6: List top import countries
+## Step 6: Find out top import/export countries
 
 ```{r}
 #| code-fold: true
@@ -156,13 +158,6 @@ Top10Import <- unique(AllImtop10)
 ImTop10 <- impexp_use %>%
  filter(Country %in% Top10Import)
 
-```
-
-## Step 6: List top export countries
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show"
 ExTop_2020 <- impexp_use %>%
   filter(time < '2021-01-01') %>%
   group_by(Country) %>%
@@ -198,72 +193,120 @@ IETop10 <- impexp_use %>%
 
 ```
 
+# 3. Visual Analytics
 
-#cycleplot
+## 1. Slopegraph
+
+### Import trend
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+IETop10 %>% 
+  mutate(Year = factor(time)) %>%
+  filter(Year %in% c("2020-01-01","2021-01-01","2022-01-01","2022-12-01")) %>%
+  newggslopegraph(Year, Import, Country,
+                Title = "Import by Singapore to Top countries",
+                SubTitle = "2020 to 2022", Caption = "Singapore Imports as at date")
+```
+
+Based on the graph, we can see that in 2021 - 2022, there is a switch in positions of the top few countries that Singapore imports from.
+
+-   US dipped in 2021 when covid impacted them the highest.
+
+-   Taiwan went from the 4th import country and had a sharp increase of which they were the top country Singapore imported from in Jan 2022 after which they had a sharp drop down to the 3rd position.
+
+    -   It maybe likely that Singapore imported more from Taiwan during those periods to cover the gaps from the other countries (such as US)
+
+-   Korea also had a sharp increase in 2022, jumping above Japan.
+
+-   UAE is another suprising country of which Singapore imports from. It also jumped up the ranks during covid. As Singapore mainly imports crude oils from UAE, it could also possibly mean that the increase is in preparation of the opening of traveling.
+
+### Export trend
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+IETop10 %>% 
+  mutate(Year = factor(time)) %>%
+  filter(Year %in% c("2020-01-01","2021-01-01","2022-01-01","2022-12-01")) %>%
+  newggslopegraph(Year, Export, Country,
+                Title = "Export by Singapore to Top countries",
+                SubTitle = "2020 to 2022", Caption = "Singapore Exports as at date")
+```
+
+Similar to the imports, we see that Covid impacted US borders the most as there is a dip for both import and export. It is only in 2022 when US opened its boarders. This is the same for Indonesia when there is a huge dip in 2021.
+
+It is surprising that Hong Kong is now the top country that Singapore exports to. This could be aviation engines as Hong Kong prepares for a revival of their travel industry.
+
+### Nett trend
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+IETop10 %>% 
+  mutate(Year = factor(time)) %>%
+  filter(Year %in% c("2020-01-01","2021-01-01","2022-01-01","2022-12-01")) %>%
+  newggslopegraph(Year, nett, Country,
+                Title = "Nett Import/Export by Singapore to Top countries",
+                SubTitle = "2020 to 2022", Caption = "Nett import/export as at date")
+```
+
+With this nett trend, we can tell that we Export the most to Hong Kong while not having any Imports from them. For China, even though they are the second highest country that Singapore exports to, Singapore imports more from them.
+
+## 2. Cycleplot
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show"
 options(scipen = 999)
-hline.data <- export_use %>% 
-  group_by(month) %>%
-  summarise(avgvalue = mean(Belgium))
-
-xbrks <- seq(2020,2022,1)
-ggplot() + 
-  geom_line(data=export_use,
-            aes(x=year, 
-                y=Belgium, 
-                group=month), 
-            colour="black") +   
-  geom_hline(aes(yintercept= avgvalue), 
-             data=hline.data, 
-             linetype=6, 
-             colour="red", 
-             size=0.5) + 
-  facet_grid(~month) + 
-  labs(axis.text.x = element_blank(),
-       title = "Export to Belgium") +
-  xlab("Year") +
-  ylab("$") + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) + scale_x_continuous(breaks=xbrks)
-
-```
-
-```{r}
-#| code-fold: true
-#| code-summary: "Show"
 cycle_plot <- function(country){
   hline.data <- IETop10 %>% 
     filter(Country == country) %>%
-    group_by(month(.data$time)) %>%
+    group_by(month) %>%
     summarise(avgvalue = mean(Export))
   
+  hlineim.data <- IETop10 %>% 
+    filter(Country == country) %>%
+    group_by(month) %>%
+    summarise(avgvalue = mean(Import))
+  
   xbrks <- seq(2020,2022,1)
+  legend <- c("Red - Export", "Blue - Import")
   
   ggplot() + 
     geom_line(data=IETop10 |> filter(Country == country),
-              aes(x=year(.data$time), 
+              aes(x=year, 
                   y=.data$Export, 
-                  group=month(.data$time)), 
-              colour="black") +   
+                  group=month), 
+              colour="darkred") +   
     geom_hline(aes(yintercept= avgvalue), 
                data=hline.data,
                linetype=6, 
                colour="red", 
                size=0.5) + 
-    facet_grid(~month(.data$time)) + 
+     geom_line(data=IETop10 |> filter(Country == country),
+              aes(x=year, 
+                  y=.data$Import, 
+                  group=month), 
+              colour="darkblue")  +     
+    geom_hline(aes(yintercept= avgvalue), 
+               data=hlineim.data,
+               linetype=6, 
+               colour="blue", 
+               size=0.5) +
+    facet_grid(~month) + 
     labs(axis.text.x = element_blank(),
          title = paste0("Export to ",country)) +
     xlab("Year") +
-    ylab("$") + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) + 
-    scale_x_continuous(breaks=xbrks)
+    ylab("$") + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
+    scale_x_continuous(breaks=xbrks) 
 }
 
 cycle <- map(Top10, cycle_plot)
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 #### Mainland China
 
 ```{r}
@@ -279,45 +322,110 @@ cycle[[1]]
 #| code-summary: "Show"
 cycle[[2]]
 ```
-:::
 
-cycle[[3]]
-cycle[[4]]
-cycle[[5]]
-
-
-
-```
-
-#slopegraph
+#### United States
 
 ```{r}
-
-IETop10 %>% 
-  mutate(Year = factor(time)) %>%
-  filter(Year %in% c("2020-01-01","2021-01-01","2022-12-01")) %>%
-  newggslopegraph(Year, Import, Country,
-                Title = "Import by Singapore to Top countries",
-                SubTitle = "2020 to 2022", Caption = "Singapore Imports as at date")
-
-IETop10 %>% 
-  mutate(Year = factor(time)) %>%
-  filter(Year %in% c("2020-01-01","2021-01-01","2022-12-01")) %>%
-  newggslopegraph(Year, Export, Country,
-                Title = "Export by Singapore to Top countries",
-                SubTitle = "2020 to 2022", Caption = "Singapore Exports as at date")
-
-
-IETop10 %>% 
-  mutate(Year = factor(time)) %>%
-  filter(Year %in% c("2020-01-01","2021-01-01","2022-12-01")) %>%
-  newggslopegraph(Year, nett, Country,
-                Title = "Nett Import/Export by Singapore to Top countries",
-                SubTitle = "2020 to 2022", Caption = "Nett import/export as at date")
-
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[3]]
 ```
 
+#### Malaysia
 
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[4]]
+```
 
+#### Indonesia
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[5]]
+```
+
+#### Taiwan
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[6]]
+```
+
+#### Japan
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[7]]
+```
+
+#### Korea
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[8]]
+```
+
+#### Thailand
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[9]]
+```
+
+#### Vietnam
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[10]]
+```
+
+#### France
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[11]]
+```
+
+#### Germany
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[12]]
+```
+
+#### UAE
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show"
+cycle[[13]]
+```
+:::
+
+Using the cycle graph, we can tell that most countries have a dip in 2021.
+
+Countries that highly impacted by seasons:
+
+1.  Mainland China
+2.  United States
+3.  Japan
+4.  Thailand
+5.  UAE
+
+For Germany, it is interesting to note that there was a rise in imports during covid, especially in May, Sept and Dec 2021. Perhaps these were to make up for gaps in our supply chain during covid.
+
+# 4. Conclusion
+
+```{r}
 
 ```
